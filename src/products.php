@@ -65,7 +65,7 @@ $('#add').on('click',function(){
         }
    }).done(function(data){
 
-    var jsonArr = JSON.parse(data);
+     jsonArr = JSON.parse(data);
     display(jsonArr);
   
 }) 
@@ -88,7 +88,7 @@ var html = "<table>";
         len = jArr.length
 	    html += "<tr><td><input type = checkbox id='"+i+"' onclick='complete("+parseInt([i])+")' ></td><td>"+jArr[i]+"</td><td></td><td><button id='"+i+"' onclick='edit("+parseInt([i])+")' > Edit</button><td><button id='"+i+"' onclick='remove("+parseInt([i])+")' > Delete</button></td></tr>";
     }
-html += "<table>";
+html += "</table>";
  document.getElementById('disp').innerHTML= html ;
 
  }
@@ -105,7 +105,9 @@ function complete(id){
         }
     }).done(function(data2){
         var jsonArr2 = JSON.parse(data2);
-         displaycomp(jsonArr2);
+        displaycomp(jsonArr2);
+        displayagain(jsonArr2,id);
+       // console.log(data2);
           
         
   
@@ -114,9 +116,9 @@ function complete(id){
 function displaycomp(compjArr){
 var html1 = "<table>";
     for(let i = 0; i<compjArr.length ; i++){
-	    html1 += "<tr><td><input type = checkbox id='"+i+"' onclick='complete("+parseInt([i])+")' ></td><td>"+compjArr[i]+"</td><td></td><td><button id='"+i+"' onclick='edit("+parseInt([i])+")'> Edit</button><td><button id='"+i+"'> Delete</button></td></tr>";
+	    html1 += "<tr><td><input type = checkbox id='"+i+"' onclick='redo("+parseInt([i])+")' checked></td><td>"+compjArr[i]+"</td><td></td><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")'> Edit</button><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")' > Delete</button></td></tr>";
     }
-html1 += "<table>";
+html1 += "</table>";
  document.getElementById('disp2').innerHTML= html1 ;
 
  }
@@ -139,69 +141,66 @@ html1 += "<table>";
     })
  }
 
-function edit(editid){
+ var updateid;
+ function edit(editid){
     $('#update').show();
     $('#add').hide();
-    for (var i = 0; i < len; i++) {
+     for (var i = 0; i < len; i++) {
              if(i == editid){
-                 console.log(editid);
-                 console.log(jsonArr[i]);
-               // $('#new-task').val(jsonarr[i]);
+               
+                 $('#new-task').val(jsonArr[i]);
+                 updateid = i;
              }
             }
+                 $('#update').on('click',function(){
+                     $('#add').show();
+                     $('#update').hide();
+                     console.log(updateid);
+                     var uptask= $('#new-task').val();
+                     $.ajax({
+                         url : "functions.php",
+                         type : "POST",
+                         datatype : "JSON",
+ 
+                       data:{
+                            upid : updateid,
+                         uptask : uptask,
+                        "action" : "update"
+                       }
+                         }).done(function(data4){
+                           var upArr = JSON.parse(data4);
+                           display(upArr);
+                         })
+                 })
+               
+             
+           
+ 
+ }
+function displayagain(jsonArr2,id){
+    var html2 = "<table>";
+   for (let i = 0; i<jsonArr.length; i++){
+      if (id == i){
+          jsonArr.splice(i,1);
+           continue;
+          }
+      html2 += "<tr><td><input type = checkbox id='"+i+"' onclick='redo("+parseInt([i])+")' ></td><td>"+jsonArr[i]+"</td><td></td><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")'> Edit</button><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")' > Delete</button></td></tr>";
+
+
+    }
+    html2 += "</table>";
+ document.getElementById('disp').innerHTML= html2 ;
+
 
 }
 
-	</script>
-
-
 </script>
+
+
+
 
 </body>
 </html>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-<?php 
-//  var u_id;
-//     function Edit(id){
-//         for (var i = 0; i < length; i++) {
-//              if(i == id){
-//                 u_id = i
-//                 $('#input').val(js_array[i]);
-//                   $('#btn2').on('click' ,function() {
-//                       var u_value = $('#input').val();
-//                     $.ajax({
-//                         success:function(data){
-//                        var js_array1 = JSON.parse(data);
-//                        display(js_array1);
-//                    }
-//                   })
-//                 })
-//              }
-//         }
-//     }                     u_value: u_value,
-//                          edit: u_id
-//                      },
-//                      success:function(data){
-//                        var js_array1 = JSON.parse(data);
-//                        display(js_array1);
-//                    }
-//                   })
-//                 })
-//              }
-//         }
-//     } 
-    ?>

@@ -106,8 +106,19 @@ function complete(id){
     }).done(function(data2){
         var jsonArr2 = JSON.parse(data2);
         displaycomp(jsonArr2);
-        displayagain(jsonArr2,id);
-       // console.log(data2);
+
+        
+        for(let i =0; i<jsonArr.length;i++){
+        
+        if (id == i){
+                 
+            jsonArr.splice(i,1);
+            display(jsonArr);
+        }
+    }
+ 
+
+      
           
         
   
@@ -177,22 +188,7 @@ html1 += "</table>";
            
  
  }
-function displayagain(jsonArr2,id){
-    var html2 = "<table>";
-   for (let i = 0; i<jsonArr.length; i++){
-      if (id == i){
-          jsonArr.splice(i,1);
-           continue;
-          }
-      html2 += "<tr><td><input type = checkbox id='"+i+"' onclick='redo("+parseInt([i])+")' ></td><td>"+jsonArr[i]+"</td><td></td><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")'> Edit</button><td><button id='"+i+"' onclick='editcomp("+parseInt([i])+")' > Delete</button></td></tr>";
 
-
-    }
-    html2 += "</table>";
- document.getElementById('disp').innerHTML= html2 ;
-
-
-}
 
 </script>
 
